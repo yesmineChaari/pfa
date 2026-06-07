@@ -7,7 +7,9 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from shared.db import connect_database
 from shared.persistence import load_phase1_ec2_outputs, load_phase2_ec2_outputs
@@ -17,7 +19,7 @@ from agent2.phase3.github_terraform import TerraformSource, resolve_terraform_bu
 
 INSTANCE_NAME = os.environ.get("TEST_INSTANCE", "app1-worker-oversized-risky")
 RUN_ID = int(os.environ.get("AGENT2_RUN_ID", "17"))
-OUTPUT_FILE = Path(__file__).parent / "output" / f"phase3_single_{INSTANCE_NAME}.json"
+OUTPUT_FILE = PROJECT_ROOT / "output" / f"phase3_single_{INSTANCE_NAME}.json"
 
 
 async def main() -> None:
@@ -102,4 +104,5 @@ async def main() -> None:
     print(f"\n--- LLM RAW RESPONSE ---\n{llm_result.get('raw_response', '')}")
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -7,14 +7,16 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from shared.db import connect_database
 from shared.persistence import load_phase1_ec2_outputs, load_phase2_ec2_outputs
 from agent2.phase3.llm_phase3 import run_phase3_llm
 
 RUN_ID = int(os.environ.get("AGENT2_RUN_ID", "17"))
-OUTPUT_FILE = Path(__file__).parent / "output" / "phase3_4instances.json"
+OUTPUT_FILE = PROJECT_ROOT / "output" / "phase3_4instances.json"
 
 TARGET_INSTANCES = [
     "app1-worker-oversized-risky",
@@ -71,4 +73,5 @@ async def main() -> None:
         )
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

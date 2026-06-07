@@ -7,7 +7,9 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from shared.db import connect_database
 from shared.persistence import load_phase1_s3_outputs, save_phase3_outputs
@@ -15,7 +17,7 @@ from agent2.phase3.llm_phase3 import run_phase3_llm
 
 EC2_RUN_ID = int(os.environ.get("AGENT2_RUN_ID", "17"))
 S3_RUN_ID = int(os.environ.get("AGENT2_S3_RUN_ID", "41"))
-OUTPUT_FILE = Path(__file__).parent / "output" / "phase3_s3.json"
+OUTPUT_FILE = PROJECT_ROOT / "output" / "phase3_s3.json"
 
 
 async def main() -> None:
@@ -59,4 +61,5 @@ async def main() -> None:
         )
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

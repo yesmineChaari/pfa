@@ -47,8 +47,7 @@ Redis carries event metadata only. Inventory, deterministic outputs, and Phase
 |-- llm_benchmarking/            # Legacy benchmark access wrappers
 |-- docker-compose.yml           # Full containerized stack
 |-- rules.yaml                   # Detection and guardrail rules
-|-- tests/                       # unittest coverage
-`-- test_*.py                    # Ad hoc Phase 3 verification scripts
+`-- tests/                       # Test coverage and ad hoc Phase 3 verification scripts
 ```
 
 Root `phase1`, `phase2`, `phase3`, `llm_benchmarking`, and `persistence`
@@ -191,11 +190,15 @@ tables are created and migrated at runtime by `shared.persistence.phase_outputs`
 
 ## Development
 
-Run tests without external services:
+Run the local unittest suite:
 
 ```powershell
 python -m unittest discover -s tests
 ```
+
+Pytest-based GitHub integration checks and ad hoc Phase 3 verification scripts
+also live in `tests/`; run them only when the required GitHub, DB, or LLM
+environment variables are set.
 
 The Agent2-owned embedded benchmark is located at:
 
